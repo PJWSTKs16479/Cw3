@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Cw3.DAL;
@@ -25,9 +26,19 @@ namespace Cw3.Controllers
         public IActionResult GetStudent(string orderBy)
         {
             return Ok(_dbService.GetStudents());
+
+            using (var con = new SqlConnection("data source=db-mssql;initial catalog=s16479;integrated security=true"))
+            using (var com = new SqlCommand())
+            {
+                com.Connection = con;
+                com.CommandText = "select * from Studentss ......";
+            }
+
         }
 
-        [HttpGet("{id}")]
+      
+
+[HttpGet("{id}")]
 
         public IActionResult GetStudent(int id)
         {
