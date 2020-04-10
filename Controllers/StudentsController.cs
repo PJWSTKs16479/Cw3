@@ -25,13 +25,26 @@ namespace Cw3.Controllers
 
         public IActionResult GetStudent(string orderBy)
         {
-            return Ok(_dbService.GetStudents());
-
+/*            return Ok(_dbService.GetStudents());
+*/
             using (var con = new SqlConnection("data source=db-mssql;initial catalog=s16479;integrated security=true"))
             using (var com = new SqlCommand())
             {
                 com.Connection = con;
-                com.CommandText = "select * from Studentss ......";
+                com.CommandText = "select FirstName,LastName,BirthDate,Name,Semester from Student as st inner join Enrollment as e on st.IdEnrollment = e.IdEnrollment inner join Studies as s on e.IdStudy = s.IdStudy";
+
+                con.Open();
+                var dr = com.ExecuteReader();
+                while (dr.Read())
+                {
+                    var st = new Student();
+                    st.FirstName = dr["FirstName"].ToString();
+                    st.LastName = dr["LastName"].ToString();
+                    st.BirthDate = dr["BirthDate"].ToString();
+                    st.Name = dr["Name"].ToString();
+                    st.Semester = dr["Semester"].ToString();
+                }
+                
             }
 
         }
