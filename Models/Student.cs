@@ -15,5 +15,7 @@ namespace Cw3.Models
         public string IdEnrollment { get; set; }
         public string Name { get; set; }
         public string Semester { get; set; }
+        public string IdStudy { get; set; }
+        public string StartDate { get; set; }
     }
 }

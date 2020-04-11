@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
 using Cw3.DAL;
 using Cw3.Models;
 using Microsoft.AspNetCore.Http;
@@ -14,19 +14,13 @@ namespace Cw3.Controllers
     [Route("api/students")]
     public class StudentsController : ControllerBase
     {
-        private readonly IDbService _dbService;
-
-        public StudentsController(IDbService dbService)
-        {
-            _dbService = dbService;
-        }
 
         [HttpGet]
 
-        public IActionResult GetStudent(string orderBy)
+        public IActionResult GetStudents()
         {
-/*            return Ok(_dbService.GetStudents());
-*/
+            var _students = new List<Student>();
+
             using (var con = new SqlConnection("data source=db-mssql;initial catalog=s16479;integrated security=true"))
             using (var com = new SqlCommand())
             {
@@ -35,6 +29,7 @@ namespace Cw3.Controllers
 
                 con.Open();
                 var dr = com.ExecuteReader();
+
                 while (dr.Read())
                 {
                     var st = new Student();
@@ -43,15 +38,72 @@ namespace Cw3.Controllers
                     st.BirthDate = dr["BirthDate"].ToString();
                     st.Name = dr["Name"].ToString();
                     st.Semester = dr["Semester"].ToString();
+                    _students.Add(st);
                 }
-                
+
             }
+            return Ok(_students);
+        }
+
+        [HttpGet("{indexNumber}")]
+
+        public IActionResult GetStudent(string indexNumber)
+        {
+            using (var con = new SqlConnection("data source=db-mssql;initial catalog=s16479;integrated security=true"))
+            using (var com = new SqlCommand())
+            {
+                com.Connection = con;
+                /*com.CommandText = "select * from student,enrollment where indexnumber = '"+indexNumber+"' AND student.idenrollment= enrollment.idenrollment";*/
+
+                com.CommandText = "select * from student,enrollment where indexnumber = @index AND student.idenrollment= enrollment.idenrollment";
+
+                /*SqlParameter par = new SqlParameter();
+                par.Value = indexNumber;
+                par.ParameterName = "index";
+                com.Parameters.Add(par);*/
+
+                com.Parameters.AddWithValue("index", indexNumber);
+
+                con.Open();
+                var dr = com.ExecuteReader();
+
+                if (dr.Read())
+                {
+                    var st = new Student();
+                    st.IdEnrollment = dr["IdEnrollment"].ToString();
+                    st.Semester = dr["Semester"].ToString();
+                    st.IndexNumber = dr["IndexNumber"].ToString();
+                    st.IdStudy = dr["IdStudy"].ToString();
+                    st.StartDate = dr["StartDate"].ToString();
+                    return Ok(st);
+                }
+            }
+            return NotFound();
+        }
+
+
+
+
+
+
+        /*private readonly IDbService _dbService;
+
+        public StudentsController(IDbService dbService)
+        {
+            _dbService = dbService;
+        }
+
+        [HttpGet]
+
+        public IActionResult GetStudent()
+        {
+            return Ok(_dbService.GetStudents());
 
         }
 
-      
 
-[HttpGet("{id}")]
+
+        [HttpGet("{id}")]
 
         public IActionResult GetStudent(int id)
         {
@@ -64,7 +116,7 @@ namespace Cw3.Controllers
             }
 
             return NotFound("Nie znaleziono studenta");
-        }
+        }*/
 
         [HttpPost]
 
