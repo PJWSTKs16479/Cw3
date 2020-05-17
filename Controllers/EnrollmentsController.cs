@@ -44,7 +44,7 @@ namespace Cw3.Controllers
                     int idStudies = (int)dr["IdStudy"];
                     dr.Close();
 
-                    int IdEnrollment = 3;
+                    int IdEnrollment = 4;
                     com.CommandText = "select IdEnrollment from Enrollment where Semester = @Semester and IdStudy = @IdStudy";
                     com.Parameters.AddWithValue("IdStudy", idStudies);
                     com.Parameters.AddWithValue("Semester", 1);
@@ -52,10 +52,10 @@ namespace Cw3.Controllers
                     if (!dr.Read())
                     {
                         dr.Read();
-                        com.CommandText = "Insert into Enrollment(IdEnrollment, Semester, IdStudy, StartDate) values (@IdEnrollment, @Semester1, @IdStudy, @StartDate)";
+                        com.CommandText = "Insert into Enrollment(IdEnrollment, Semester, IdStudy, StartDate) values (@IdEnrollment, @Semester1, @IdStudy1, @StartDate)";
                         com.Parameters.AddWithValue("IdEnrollment", IdEnrollment);
                         com.Parameters.AddWithValue("Semester1", 1);
-                        com.Parameters.AddWithValue("IdStudy", idStudies);
+                        com.Parameters.AddWithValue("IdStudy1", idStudies);
                         com.Parameters.AddWithValue("StartDate", DateTime.Now);
                         dr.Close();
                         com.ExecuteNonQuery();
