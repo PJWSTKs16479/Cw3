@@ -1,8 +1,12 @@
-﻿using Cw3.Models;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Data.SqlClient;
+using Cw3.DAL;
+using Cw3.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cw3.Controllers
 {
@@ -31,11 +35,12 @@ namespace Cw3.Controllers
                     var st = new Student();
                     st.FirstName = dr["FirstName"].ToString();
                     st.LastName = dr["LastName"].ToString();
-                    st.BirthDate = dr["BirthDate"].ToString();
+                    //st.BirthDate = dr["BirthDate"].ToString();
                     st.Name = dr["Name"].ToString();
-                    st.Semester = dr["Semester"].ToString();
+                    //st.Semester = dr["Semester"].ToString();
                     _students.Add(st);
                 }
+                dr.Close();
 
             }
             return Ok(_students);
@@ -51,7 +56,7 @@ namespace Cw3.Controllers
                 com.Connection = con;
                 /*com.CommandText = "select * from student,enrollment where indexnumber = '"+indexNumber+"' AND student.idenrollment= enrollment.idenrollment";*/
 
-                com.CommandText = "select * from student,enrollment where indexnumber = @index AND student.idenrollment= enrollment.idenrollment";
+                com.CommandText = "select * from student,enrollment where indexnumber = @index AND student.idenrollment = enrollment.idenrollment";
 
                 /*SqlParameter par = new SqlParameter();
                 par.Value = indexNumber;
@@ -67,12 +72,14 @@ namespace Cw3.Controllers
                 {
                     var st = new Student();
                     st.IdEnrollment = dr["IdEnrollment"].ToString();
-                    st.Semester = dr["Semester"].ToString();
+                    //st.Semester = dr["Semester"].ToString();
                     st.IndexNumber = dr["IndexNumber"].ToString();
                     st.IdStudy = dr["IdStudy"].ToString();
                     st.StartDate = dr["StartDate"].ToString();
+                    dr.Close();
                     return Ok(st);
                 }
+                
             }
             return NotFound();
         }
