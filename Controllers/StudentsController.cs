@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Data.SqlClient;
-using Cw3.DAL;
-using Cw3.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Cw3.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 
 namespace Cw3.Controllers
 {
